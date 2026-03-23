@@ -1,0 +1,2 @@
+npx create-next-app@latest ai-chatbot
+cd ai-chatbot
