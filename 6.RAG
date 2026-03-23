@@ -1,0 +1,5 @@
+export const notes = [
+  "Machine Learning is a subset of AI.",
+  "RAG means Retrieval Augmented Generation.",
+  "Neural networks mimic the human brain.",
+];
