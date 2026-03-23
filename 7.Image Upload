@@ -1,0 +1,4 @@
+<input type="file" onChange={(e: any) => {
+  const file = e.target.files[0];
+  alert("Image uploaded: " + file.name);
+}} />
