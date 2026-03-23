@@ -1,0 +1,32 @@
+import { NextResponse } from "next/server";
+import { notes } from "@/data/notes";
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+  const lastMessage = messages[messages.length - 1].content;
+
+  // Simple RAG (keyword match)
+  const context = notes.find(n => lastMessage.toLowerCase().includes("ai"))
+    || "General knowledge";
+
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "llama3-8b-8192",
+      messages: [
+        { role: "system", content: `Use this context: ${context}` },
+        ...messages
+      ],
+    }),
+  });
+
+  const data = await response.json();
+
+  return NextResponse.json({
+    reply: data.choices[0].message.content,
+  });
+}
